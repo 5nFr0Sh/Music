@@ -8,16 +8,16 @@ import yt_dlp
 # =========================================================================
 # ⚙️ CONFIGURATION & CREDENTIALS (الإعدادات والتوكن لـ سوالف العرب)
 # =========================================================================
-TOKEN = "MTUyNjgwMDY2NTI1NzcwNTUyMw.Go98-g.xHH4y3NK1-qc0t7lMVm1FUzYn8BKD8lze0Mk4Y" # التوكن الخاص بك
+TOKEN = "MTUyNjgwMDY2NTI1NzcwNTUyMw.GleoKk.8AS9ef4ZPhl8eeLOMD0Rt9HZDxm0C7zSUvCS6Q" # التوكن الخاص بك
 OWNER_ID = 211773456562257930  # الآيدي الخاص بك كمالك للبوت (Mond Reef)
 
-# مسار الـ FFmpeg المباشر المثبت على جهازك لمنع أخطاء التشغيل
-FFMPEG_PATH = r"C:\Users\crtrc\AppData\Local\ffmpegio\ffmpeg-downloader\ffmpeg\bin\ffmpeg.exe"
+# مسار الـ FFmpeg للينكس (تم تعديله ليعمل تلقائياً على السيرفر)
+FFMPEG_PATH = "ffmpeg"
 
 # تعديل سطر الـ bug reports لتجنب الأخطاء مع النسخ الجديدة لـ yt-dlp
 yt_dlp.utils.bug_reports_message = lambda *args, **kwargs: ""
 
-# خيارات البحث واستخراج الصوت من يوتيوب مع جلب معلومات الألبوم والغلاف
+# خيارات البحث واستخراج الصوت مع دمج ملف الكوكيز لتخطي حظر يوتيوب
 YTDL_OPTS = {
     "format": "bestaudio/best",
     "extractaudio": True,
@@ -32,6 +32,7 @@ YTDL_OPTS = {
     "no_warnings": True,
     "default_search": "auto",
     "source_address": "0.0.0.0",
+    "cookiefile": "cookies.txt",  # السطر السحري لتخطي مشكلة الـ Sign-in بالـ VPS!
 }
 
 # خيارات تشغيل الـ FFmpeg لضمان أعلى استقرار وبث صوتي فخم نقي
@@ -63,7 +64,7 @@ def is_bot_owner():
     return commands.check(predicate)
 
 # =========================================================================
-# 📁 STATE MANAGEMENT (إدارة غرف الصوت وقائمة الانتظار)
+# 📂 STATE MANAGEMENT (إدارة غرف الصوت وقائمة الانتظار)
 # =========================================================================
 class GuildState:
     def __init__(self):
@@ -241,7 +242,7 @@ async def on_message(message: discord.Message):
     await bot.process_commands(message)
 
 # =========================================================================
-# 🔊 BOT ADMINISTRATIVE COMMANDS (أوامر الإدارة الحصرية للمالك)
+# 🔒 BOT ADMINISTRATIVE COMMANDS (أوامر الإدارة الحصرية للمالك)
 # =========================================================================
 async def handle_set_command(message: discord.Message, arg: str):
     """التحكم في قفل حراسة الصوت 24/7 بروم محددة (تصميم فخم جداً)."""
