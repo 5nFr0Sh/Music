@@ -17,7 +17,7 @@ FFMPEG_PATH = "ffmpeg"
 # تعديل سطر الـ bug reports لتجنب الأخطاء مع النسخ الجديدة لـ yt-dlp
 yt_dlp.utils.bug_reports_message = lambda *args, **kwargs: ""
 
-# خيارات البحث واستخراج الصوت المعدلة لتخطي الحظر بدون كوكيز
+# خيارات متطورة جداً لتخطى الحظر الشديد بدون كوكيز (محاكاة الموبايل)
 YTDL_OPTS = {
     "format": "bestaudio/best",
     "extractaudio": True,
@@ -33,19 +33,18 @@ YTDL_OPTS = {
     "default_search": "auto",
     "source_address": "0.0.0.0",
     
-    # 🌟 الخدع البديلة لتخطي الحظر بدون كوكيز:
+    # 🌟 إجبار اليوتيوب على معاملتنا كجهاز آيفون أو أندرويد فقط وتجنب الويب تماماً
     "extractor_args": {
         "youtube": {
-            # إجبار البوت على استخدام مشغلات الويب المخفية وأجهزة التلفزيون الذكية التي لا تطلب تسجيل دخول
-            "clients": ["tv", "web", "android"],
+            "player_client": ["ios", "android"], 
             "skip": ["dash", "hls"]
         }
     },
-    # تفعيل وكيل مستخدم (User-Agent) حديث يحاكي متصفح حقيقي بالكامل
+    # ترويسة هيدر مخصصة لمحاكاة تطبيق يوتيوب الرسمي على الموبايل
     "http_headers": {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
+        "User-Agent": "com.google.ios.youtube/19.17.2 (iPhone16,2; U; CPU iOS 17_5 like Mac OS X; en_US)",
+        "Accept": "*/*",
+        "Accept-Language": "en-US,en;q=0.9",
     }
 }
 
