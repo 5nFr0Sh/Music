@@ -19,7 +19,8 @@ yt_dlp.utils.bug_reports_message = lambda *args, **kwargs: ""
 
 # خيارات متطورة جداً لتخطى الحظر باستخدام نظام الـ OAuth2 الذكي
 YTDL_OPTS = {
-    "format": "bestaudio/best",
+    # 1️⃣ تعديل صيغة الصوت لتكون أكثر مرونة (تحميل أفضل صيغة صوتية متاحة تلقائياً)
+    "format": "bestaudio", 
     "extractaudio": True,
     "audioformat": "mp3",
     "outtmpl": "%(extractor)s-%(id)s-%(title)s.%(ext)s",
@@ -33,19 +34,17 @@ YTDL_OPTS = {
     "default_search": "auto",
     "source_address": "0.0.0.0",
     
-    # 1️⃣ الإشارة إلى ملف الكوكيز الذي قمت برفعه للسيرفر
+    # الكوكيز الفعالة الخاصة بك
     "cookiefile": "cookies.txt", 
     
+    # 2️⃣ إزالة قيود الـ player_client والـ skip لفتح كامل الصيغ المدعومة بواسطة الكوكيز
     "extractor_args": {
         "youtube": {
-            # 2️⃣ تم حذف خيار الـ oauth2 ليعمل ملف الكوكيز مباشرة دون تعليق
-            "player_client": ["ios", "android"], 
-            "skip": ["dash", "hls"]
+            "skip": []
         }
     },
-    # ترويسة هيدر مخصصة لمحاكاة تطبيق يوتيوب الرسمي على الموبايل
     "http_headers": {
-        "User-Agent": "com.google.ios.youtube/19.17.2 (iPhone16,2; U; CPU iOS 17_5 like Mac OS X; en_US)",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Accept": "*/*",
         "Accept-Language": "en-US,en;q=0.9",
     }
