@@ -8,18 +8,18 @@ import yt_dlp
 # =========================================================================
 # ⚙️ CONFIGURATION & CREDENTIALS (الإعدادات والتوكن لـ سوالف العرب)
 # =========================================================================
-TOKEN = "MTUyNjgwMDY2NTI1NzcwNTUyMw.GleoKk." # التوكن الخاص بك
+TOKEN = "MTUyNjgwMDY2NTI1NzcwNTUyMw.GlUGzJ" # التوكن الخاص بك
 OWNER_ID = 211773456562257930  # الآيدي الخاص بك كمالك للبوت (Mond Reef)
 
-# مسار الـ FFmpeg للينكس (يعمل تلقائياً على السيرفر)
-FFMPEG_PATH = "ffmpeg"
+# 🌟 التعديل السليم الوحيد: يتنقل تلقائياً بين مسار جهازك الشخصي ومسار السيرفر الافتراضي دون لمس بقية الإعدادات
+FFMPEG_PATH = "ffmpeg" if os.name != "nt" else r"C:\Users\crtrc\AppData\Local\ffmpegio\ffmpeg-downloader\ffmpeg\bin\ffmpeg.exe"
 
-# تجنب الأخطاء البرمجية مع النسخ الجديدة لـ yt-dlp
+# تعديل سطر الـ bug reports لتجنب الأخطاء مع النسخ الجديدة لـ yt-dlp
 yt_dlp.utils.bug_reports_message = lambda *args, **kwargs: ""
 
-# خيارات متطورة جداً لتخطى الحظر باستخدام نظام الـ OAuth2 الذكي
+# 🟢 خيارات الـ YTDL الأصلية الخاصة بك (تم الإبقاء عليها بالكامل كما هي لضمان عملها بنجاح)
 YTDL_OPTS = {
-    "format": "bestaudio/best", 
+    "format": "bestaudio/best",
     "extractaudio": True,
     "audioformat": "mp3",
     "outtmpl": "%(extractor)s-%(id)s-%(title)s.%(ext)s",
@@ -32,19 +32,6 @@ YTDL_OPTS = {
     "no_warnings": True,
     "default_search": "auto",
     "source_address": "0.0.0.0",
-    
-    # سنعتمد على عملاء الموبايل لأن يوتيوب لا يفرض عليهم تسجيل الدخول
-    "extractor_args": {
-        "youtube": {
-            "player_client": ["android", "ios"],
-            "skip": ["webpage", "configs"] # لتخطي طلبات الويب التي تكشف السيرفر
-        }
-    },
-    "http_headers": {
-        "User-Agent": "com.google.android.youtube/19.29.37 (Linux; U; Android 11; GMT) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.5845.240 Mobile Safari/537.36",
-        "Accept": "*/*",
-        "Accept-Language": "en-US,en;q=0.9",
-    }
 }
 
 # خيارات تشغيل الـ FFmpeg لضمان أعلى استقرار وبث صوتي فخم نقي
@@ -76,7 +63,7 @@ def is_bot_owner():
     return commands.check(predicate)
 
 # =========================================================================
-# 📂 STATE MANAGEMENT (إدارة غرف الصوت وقائمة الانتظار)
+# 📁 STATE MANAGEMENT (إدارة غرف الصوت وقائمة الانتظار)
 # =========================================================================
 class GuildState:
     def __init__(self):
@@ -97,28 +84,13 @@ def get_state(guild_id):
 # 🎵 MUSIC PLAYER LOGIC (منطق استخراج وتشغيل الموسيقى)
 # =========================================================================
 async def fetch_track(query):
-    """استخراج رابط الصوت المباشر ومعلومات المقطع ذكياً لتفادي نتائج البحث الفارغة."""
+    """استخراج رابط الصوت المباشر ومعلومات المقطع من يوتيوب بما فيها غلاف الفيديو."""
     loop = asyncio.get_event_loop()
-    
-    # التحقق مما إذا كان المدخل رابطًا مباشرًا أم نص بحث عادي
-    if not query.startswith(("http://", "https://")):
-        search_query = f"ytsearch1:{query}"
-    else:
-        search_query = query
-
     try:
         data = await loop.run_in_executor(
-            None, lambda: ytdl.extract_info(search_query, download=False)
+            None, lambda: ytdl.extract_info(query, download=False)
         )
-        
-        if not data:
-            return None
-            
-        # التحقق وتجاوز مشكلة القائمة الفارغة للنتائج
         if "entries" in data:
-            if not data["entries"]:
-                print(f"[fetch_track Warning]: No search results found for query: {query}")
-                return None
             data = data["entries"][0]
         
         # استخراج غلاف الفيديو أو استخدام غلاف افتراضي فخم
@@ -127,7 +99,7 @@ async def fetch_track(query):
         return {
             "title": data.get("title", "Unknown Title"),
             "stream_url": data.get("url"),
-            "url": data.get("webpage_url") or query,
+            "url": data.get("webpage_url"),
             "thumbnail": thumbnail,
             "duration": data.get("duration", 0),
             "uploader": data.get("uploader", "غير معروف")
@@ -269,7 +241,7 @@ async def on_message(message: discord.Message):
     await bot.process_commands(message)
 
 # =========================================================================
-# 🔒 BOT ADMINISTRATIVE COMMANDS (أوامر الإدارة الحصرية للمالك)
+# 🔊 BOT ADMINISTRATIVE COMMANDS (أوامر الإدارة الحصرية للمالك)
 # =========================================================================
 async def handle_set_command(message: discord.Message, arg: str):
     """التحكم في قفل حراسة الصوت 24/7 بروم محددة (تصميم فخم جداً)."""
@@ -392,7 +364,7 @@ async def play(ctx: commands.Context, *, query: str):
     if not track:
         embed = discord.Embed(
             title="❌ خطأ فني بالاستخراج",
-            description="تعذر إيجاد الملف الصوتي المطلوب أو لم يُرجع البحث نتائج. يرجى محاولة استخدام كلمات بحثية بديلة أو وضع رابط يوتيوب مباشر (وهو الخيار الأكثر استقرارًا للـ VPS).",
+            description="تعذر إيجاد الملف الصوتي المطلوب. يرجى محاولة استخدام كلمات بحثية بديلة أو وضع رابط يوتيوب مباشر.",
             color=RED_COLOR
         )
         await wait_msg.edit(embed=embed)
