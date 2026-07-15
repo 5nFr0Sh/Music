@@ -8,16 +8,16 @@ import yt_dlp
 # =========================================================================
 # ⚙️ CONFIGURATION & CREDENTIALS (الإعدادات والتوكن لـ سوالف العرب)
 # =========================================================================
-TOKEN = "MTUyNjgwMDY2NTI1NzcwNTUyMw.GleoKk" # التوكن الخاص بك
+TOKEN = "MTUyNjgwMDY2NTI1NzcwNTUyMw.GleoKk." # التوكن الخاص بك
 OWNER_ID = 211773456562257930  # الآيدي الخاص بك كمالك للبوت (Mond Reef)
 
-# مسار الـ FFmpeg للينكس (تم تعديله ليعمل تلقائياً على السيرفر)
+# مسار الـ FFmpeg للينكس (يعمل تلقائياً على السيرفر)
 FFMPEG_PATH = "ffmpeg"
 
-# تعديل سطر الـ bug reports لتجنب الأخطاء مع النسخ الجديدة لـ yt-dlp
+# تجنب الأخطاء البرمجية مع النسخ الجديدة لـ yt-dlp
 yt_dlp.utils.bug_reports_message = lambda *args, **kwargs: ""
 
-# خيارات متطورة جداً لتخطى الحظر الشديد بدون كوكيز (محاكاة الموبايل)
+# خيارات متطورة جداً لتخطى الحظر باستخدام نظام الـ OAuth2 الذكي
 YTDL_OPTS = {
     "format": "bestaudio/best",
     "extractaudio": True,
@@ -33,9 +33,12 @@ YTDL_OPTS = {
     "default_search": "auto",
     "source_address": "0.0.0.0",
     
-    # 🌟 إجبار اليوتيوب على معاملتنا كجهاز آيفون أو أندرويد فقط وتجنب الويب تماماً
+    # تفعيل ملحق الـ OAuth2 لتجاوز حظر "Sign in to confirm you're not a bot"
+    "plugin_extractors": ["yt_dlp_youtube_oauth2"],
+    
     "extractor_args": {
         "youtube": {
+            "oauth2": True, # تفعيل التوثيق الآمن للـ VPS
             "player_client": ["ios", "android"], 
             "skip": ["dash", "hls"]
         }
