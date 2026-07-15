@@ -19,8 +19,7 @@ yt_dlp.utils.bug_reports_message = lambda *args, **kwargs: ""
 
 # خيارات متطورة جداً لتخطى الحظر باستخدام نظام الـ OAuth2 الذكي
 YTDL_OPTS = {
-    # 1️⃣ تعديل صيغة الصوت لتكون أكثر مرونة (تحميل أفضل صيغة صوتية متاحة تلقائياً)
-    "format": "bestaudio", 
+    "format": "bestaudio/best", 
     "extractaudio": True,
     "audioformat": "mp3",
     "outtmpl": "%(extractor)s-%(id)s-%(title)s.%(ext)s",
@@ -34,17 +33,20 @@ YTDL_OPTS = {
     "default_search": "auto",
     "source_address": "0.0.0.0",
     
-    # الكوكيز الفعالة الخاصة بك
+    # 1. ملف الكوكيز
     "cookiefile": "cookies.txt", 
     
-    # 2️⃣ إزالة قيود الـ player_client والـ skip لفتح كامل الصيغ المدعومة بواسطة الكوكيز
+    # 2. تفعيل حل تحديات يوتيوب (هذا يربط الكود بـ Deno الذي ثبتناه)
     "extractor_args": {
         "youtube": {
-            "skip": []
+            "skip": [],
+            "player_client": ["web"],
+            "external_downloader_args": ["--remote-components", "ejs:github"]
         }
     },
+    
     "http_headers": {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
         "Accept": "*/*",
         "Accept-Language": "en-US,en;q=0.9",
     }
