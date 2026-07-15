@@ -17,7 +17,7 @@ FFMPEG_PATH = "ffmpeg" if os.name != "nt" else r"C:\Users\crtrc\AppData\Local\ff
 # تعديل سطر الـ bug reports لتجنب الأخطاء مع النسخ الجديدة لـ yt-dlp
 yt_dlp.utils.bug_reports_message = lambda *args, **kwargs: ""
 
-# 🟢 خيارات الـ YTDL الأصلية الخاصة بك (تم الإبقاء عليها بالكامل كما هي لضمان عملها بنجاح)
+# 🟢 خيارات الـ YTDL الأصلية الخاصة بك مع إضافة ملف الكوكيز بأمان
 YTDL_OPTS = {
     "format": "bestaudio/best",
     "extractaudio": True,
@@ -32,6 +32,7 @@ YTDL_OPTS = {
     "no_warnings": True,
     "default_search": "auto",
     "source_address": "0.0.0.0",
+    "cookiefile": "cookies.txt",  # 👈 هذا هو السطر السحري الجديد الذي يحل المشكلة للأبد
 }
 
 # خيارات تشغيل الـ FFmpeg لضمان أعلى استقرار وبث صوتي فخم نقي
