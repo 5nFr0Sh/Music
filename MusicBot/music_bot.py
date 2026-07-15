@@ -32,20 +32,16 @@ YTDL_OPTS = {
     "no_warnings": True,
     "default_search": "auto",
     "source_address": "0.0.0.0",
-
-    # قم بإلغاء سطر الكوكيز أو حذفه لتجنب التعارض
-    # "cookiefile": "cookies.txt", 
-
-    # إضافة تفعيل الـ OAuth2
-    "cachedir": "./cache", # مهم لحفظ جلسة تسجيل الدخول
+    
+    # سنعتمد على عملاء الموبايل لأن يوتيوب لا يفرض عليهم تسجيل الدخول
     "extractor_args": {
         "youtube": {
-            "oauth2": True,
-            "player_client": ["web"]
+            "player_client": ["android", "ios"],
+            "skip": ["webpage", "configs"] # لتخطي طلبات الويب التي تكشف السيرفر
         }
     },
     "http_headers": {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "User-Agent": "com.google.android.youtube/19.29.37 (Linux; U; Android 11; GMT) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.5845.240 Mobile Safari/537.36",
         "Accept": "*/*",
         "Accept-Language": "en-US,en;q=0.9",
     }
