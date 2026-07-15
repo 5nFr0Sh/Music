@@ -98,13 +98,28 @@ def get_state(guild_id):
 # 🎵 MUSIC PLAYER LOGIC (منطق استخراج وتشغيل الموسيقى)
 # =========================================================================
 async def fetch_track(query):
-    """استخراج رابط الصوت المباشر ومعلومات المقطع من يوتيوب بما فيها غلاف الفيديو."""
+    """استخراج رابط الصوت المباشر ومعلومات المقطع ذكياً لتفادي نتائج البحث الفارغة."""
     loop = asyncio.get_event_loop()
+    
+    # التحقق مما إذا كان المدخل رابطًا مباشرًا أم نص بحث عادي
+    if not query.startswith(("http://", "https://")):
+        search_query = f"ytsearch1:{query}"
+    else:
+        search_query = query
+
     try:
         data = await loop.run_in_executor(
-            None, lambda: ytdl.extract_info(query, download=False)
+            None, lambda: ytdl.extract_info(search_query, download=False)
         )
+        
+        if not data:
+            return None
+            
+        # التحقق وتجاوز مشكلة القائمة الفارغة للنتائج
         if "entries" in data:
+            if not data["entries"]:
+                print(f"[fetch_track Warning]: No search results found for query: {query}")
+                return None
             data = data["entries"][0]
         
         # استخراج غلاف الفيديو أو استخدام غلاف افتراضي فخم
@@ -113,7 +128,7 @@ async def fetch_track(query):
         return {
             "title": data.get("title", "Unknown Title"),
             "stream_url": data.get("url"),
-            "url": data.get("webpage_url"),
+            "url": data.get("webpage_url") or query,
             "thumbnail": thumbnail,
             "duration": data.get("duration", 0),
             "uploader": data.get("uploader", "غير معروف")
@@ -378,7 +393,7 @@ async def play(ctx: commands.Context, *, query: str):
     if not track:
         embed = discord.Embed(
             title="❌ خطأ فني بالاستخراج",
-            description="تعذر إيجاد الملف الصوتي المطلوب. يرجى محاولة استخدام كلمات بحثية بديلة أو وضع رابط يوتيوب مباشر.",
+            description="تعذر إيجاد الملف الصوتي المطلوب أو لم يُرجع البحث نتائج. يرجى محاولة استخدام كلمات بحثية بديلة أو وضع رابط يوتيوب مباشر (وهو الخيار الأكثر استقرارًا للـ VPS).",
             color=RED_COLOR
         )
         await wait_msg.edit(embed=embed)
