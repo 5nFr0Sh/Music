@@ -19,7 +19,6 @@ yt_dlp.utils.bug_reports_message = lambda *args, **kwargs: ""
 
 # خيارات متطورة جداً لتخطى الحظر باستخدام نظام الـ OAuth2 الذكي
 YTDL_OPTS = {
-    # تعديل الصيغة لتقبل أفضل صوت، أو أفضل جودة عامة إذا لم يتوفر صوت منفصل
     "format": "bestaudio/best", 
     "extractaudio": True,
     "audioformat": "mp3",
@@ -33,14 +32,15 @@ YTDL_OPTS = {
     "no_warnings": True,
     "default_search": "auto",
     "source_address": "0.0.0.0",
-    
-    # الكوكيز الفعالة الخاصة بك
-    "cookiefile": "cookies.txt", 
-    
-    # إعدادات تشغيل محرك الجافا سكريبت لحل التحديات تلقائياً
+
+    # قم بإلغاء سطر الكوكيز أو حذفه لتجنب التعارض
+    # "cookiefile": "cookies.txt", 
+
+    # إضافة تفعيل الـ OAuth2
+    "cachedir": "./cache", # مهم لحفظ جلسة تسجيل الدخول
     "extractor_args": {
         "youtube": {
-            "skip": [],
+            "oauth2": True,
             "player_client": ["web"]
         }
     },
