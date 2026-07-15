@@ -33,12 +33,12 @@ YTDL_OPTS = {
     "default_search": "auto",
     "source_address": "0.0.0.0",
     
-    # تفعيل ملحق الـ OAuth2 لتجاوز حظر "Sign in to confirm you're not a bot"
-    "plugin_extractors": ["yt_dlp_youtube_oauth2"],
+    # 1️⃣ الإشارة إلى ملف الكوكيز الذي قمت برفعه للسيرفر
+    "cookiefile": "cookies.txt", 
     
     "extractor_args": {
         "youtube": {
-            "oauth2": True, # تفعيل التوثيق الآمن للـ VPS
+            # 2️⃣ تم حذف خيار الـ oauth2 ليعمل ملف الكوكيز مباشرة دون تعليق
             "player_client": ["ios", "android"], 
             "skip": ["dash", "hls"]
         }
